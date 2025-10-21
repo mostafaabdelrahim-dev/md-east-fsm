@@ -2,7 +2,7 @@
 /*
 Plugin Name: MD East Frontend Store Manager
 Description: Frontend dashboard + wholesale form + product editor for WooCommerce. Adds a Store Manager role, creates pages, provides REST endpoints for orders, wholesale requests, product management, invoices, and a frontend panel to manage product images.
-Version: 1.0.6
+Version: 1.0.7
 Author: Mostafa Abdelrahim
 Text Domain: md-east-fsm
 */
