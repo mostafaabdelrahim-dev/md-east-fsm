@@ -250,7 +250,7 @@
       el('#p_short').value = p.short_description||'';
       el('#p_desc').value = p.description||'';
 
-      // Clear upload previews (these are for new uploads)
+      // Clear upload previews (for new uploads)
       el('#p_featured').value = p.featured_image||'';
       el('#p_featured_preview').innerHTML = '';
       el('#p_gallery_preview').innerHTML = '';
@@ -279,65 +279,3 @@
   }
   el('#p_featured_file')?.addEventListener('change', async (e)=>{
     const file = e.target.files[0];
-    if(!file) return;
-    const data = await uploadFile(file);
-    el('#p_featured').value = data.id;
-    el('#p_featured_preview').innerHTML = `<img src="${data.url}" />`;
-  });
-  el('#p_gallery_files')?.addEventListener('change', async (e)=>{
-    const out = [];
-    for(const file of e.target.files){
-      const data = await uploadFile(file);
-      out.push(data.id);
-      const img = document.createElement('img');
-      img.src = data.url; el('#p_gallery_preview').appendChild(img);
-    }
-    el('#p_gallery_preview').dataset.ids = JSON.stringify(out);
-  });
-
-  el('#productForm')?.addEventListener('submit', async (e)=>{
-    e.preventDefault();
-    const gallery = JSON.parse(el('#p_gallery_preview').dataset.ids||'[]');
-    const body = {
-      id: el('#p_id').value||undefined,
-      name: el('#p_name').value,
-      regular_price: el('#p_regular_price').value,
-      sale_price: el('#p_sale_price').value,
-      sku: el('#p_sku').value,
-      stock_quantity: el('#p_stock').value,
-      status: el('#p_status').value,
-      short_description: el('#p_short').value,
-      description: el('#p_desc').value,
-      featured_image: el('#p_featured').value||undefined,
-      gallery: gallery
-    };
-    const res = await apiPost('product', body);
-    alert('Saved product #'+res.id);
-    el('#p_id').value = '';
-    e.target.reset();
-    el('#p_featured_preview').innerHTML='';
-    el('#p_gallery_preview').innerHTML=''; el('#p_gallery_preview').removeAttribute('data-ids');
-
-    // Refresh lists and clear images panel
-    await loadProducts();
-    if (el('#mdefsm-images')) { el('#mdefsm-images').innerHTML = ''; el('#mdefsm-images').setAttribute('data-current-product','0'); }
-  });
-  el('#resetProduct')?.addEventListener('click', ()=>{
-    el('#p_id').value=''; el('#productForm').reset(); el('#p_featured_preview').innerHTML=''; el('#p_gallery_preview').innerHTML=''; el('#p_gallery_preview').removeAttribute('data-ids');
-    if (el('#mdefsm-images')) { el('#mdefsm-images').innerHTML=''; el('#mdefsm-images').setAttribute('data-current-product','0'); }
-  });
-  el('#newProduct')?.addEventListener('click', ()=>{
-    el('#resetProduct').click();
-  });
-
-  // Public hook if needed elsewhere
-  window.MDEFSM_UI_setProductId = async function(productId){
-    if (productId && el('#mdefsm-images')) {
-      el('#mdefsm-images').setAttribute('data-current-product', String(productId));
-      await loadImages(productId);
-    }
-  };
-
-  // Init
-  loadOrders(); loadWholesale(); loadChart(); loadProducts();
-})();
