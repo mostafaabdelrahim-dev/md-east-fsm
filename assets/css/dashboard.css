@@ -1,0 +1,380 @@
+/* Light theme – MD East Frontend Store Manager (Dashboard) – Fancy + Borders */
+
+
+/* ====== Variables ====== */
+:root{
+  --bg: #ffffff;
+  --bg-soft: #f7fafc;
+  --card: #ffffff;
+  --border: #cfd8e3;      /* أوضح */
+  --grid: #d7dee7;        /* حدود خلايا الجدول */
+  --text: #0f172a;
+  --text-soft: #475569;
+  --muted: #64748b;
+  --accent: #1fa97a;      /* الأخضر الأساسي */
+  --accent-ink: #063a2c;
+  --hover: #f1f5f9;
+  --shadow: 0 6px 18px rgba(15,23,42,.07);
+  --header-grad: radial-gradient(1200px 1200px at 0% -10%, #e7fff4 0%, transparent 35%), radial-gradient(1000px 800px at 100% 0%, #eef6ff 0%, transparent 35%);
+}
+
+
+/* ====== Base ====== */
+.mdefsm-wrap{
+  background:var(--bg);
+  color:var(--text);
+  padding:16px;
+  border-radius:14px;
+  border:2px solid var(--border);
+  box-shadow:var(--shadow);
+  background-image:var(--header-grad);
+}
+.mdefsm-header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:12px}
+.mdefsm-header .btn{margin-left:8px}
+.mdefsm-header .left h2{margin:0 0 4px;font-size:1.25rem}
+.mdefsm-header .left p{margin:0;color:var(--text-soft)}
+
+
+/* Buttons */
+.btn{
+  border:2px solid var(--border);
+  background:#fff;
+  color:var(--text);
+  padding:10px 14px;
+  border-radius:10px;
+  cursor:pointer;
+  transition:transform .06s ease, background .15s ease;
+  box-shadow:var(--shadow);
+}
+.btn.small{padding:6px 10px;border-radius:8px;font-size:.9rem}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.ghost{background:#fff}
+.btn:hover{background:var(--hover);transform:translateY(-1px)}
+.btn.primary:hover{filter:brightness(1.04)}
+
+
+/* Cards */
+.mdefsm-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:12px 0 18px}
+.card{
+  background:var(--card);
+  border:2px solid var(--border);
+  border-radius:12px;
+  padding:16px;
+  box-shadow:var(--shadow);
+  position:relative;
+  overflow:hidden;
+}
+.card:before{
+  content:"";
+  position:absolute;inset:0;
+  background:linear-gradient(90deg, rgba(31,169,122,.08), rgba(99,102,241,.06));
+  opacity:.6;pointer-events:none;
+}
+.card-title{color:var(--muted);font-size:.95rem;margin-bottom:6px}
+.card-value{font-size:1.6rem;font-weight:700}
+
+
+/* Tabs */
+.mdefsm-tabs{display:flex;gap:8px;margin:8px 0 14px}
+.mdefsm-tabs .tab{
+  padding:10px 12px;border-radius:10px;background:#fff;border:2px solid var(--border);
+  color:var(--text);cursor:pointer;box-shadow:var(--shadow)
+}
+.mdefsm-tabs .tab.active{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+
+
+/* Tables – with clear borders & zebra */
+.mdefsm-tab.hidden{display:none}
+.table-scroll{
+  overflow:auto;
+  border:2px solid var(--border);
+  border-radius:12px;
+  background:#fff;
+  box-shadow:var(--shadow);
+}
+.mdefsm-table{
+  width:100%;
+  border-collapse:separate;         /* مهم لإظهار الحدود الداخلية */
+  border-spacing:0;
+}
+.mdefsm-table thead th{
+  position:sticky;top:0;z-index:1;
+  background:linear-gradient(180deg,#f9fbff,#edf2f7);
+  color:var(--text-soft);
+  border-bottom:2px solid var(--border);
+  border-right:1px solid var(--grid);
+}
+.mdefsm-table thead th:first-child{border-top-left-radius:10px}
+.mdefsm-table thead th:last-child{border-top-right-radius:10px;border-right:0}
+.mdefsm-table tbody td{
+  background:#fff;
+  border-right:1px solid var(--grid);
+  border-bottom:1px solid var(--grid);
+}
+.mdefsm-table tbody td:last-child{border-right:0}
+.mdefsm-table tbody tr:nth-child(odd) td{background:#fbfdff}
+.mdefsm-table tbody tr:hover td{background:#f6fbff}
+.mdefsm-table th,.mdefsm-table td{padding:12px 10px;text-align:start}
+
+
+/* تأكيد الحدود الخارجية */
+.mdefsm-table{outline:1px solid var(--grid);outline-offset:-1px;border-radius:10px}
+.table-scroll .mdefsm-table{border-radius:10px;overflow:hidden}
+
+
+/* إبراز الأعمدة الخاصة لكل جدول */
+/* — جدول الطلبات: عمود الحالة (الثالث) */
+#ordersTable tbody td:nth-child(3){
+  text-transform:capitalize;
+  font-weight:600;
+  color:#0b3b2d;
+  background:#e9fff7;
+  border-color:#bfead9;
+}
+
+
+/* Chart Box (بحد علوي ملوّن) */
+.chart-box{
+  margin-top:16px;background:#fff;border:2px solid var(--border);border-radius:12px;padding:12px;box-shadow:var(--shadow);
+  position:relative;
+}
+.chart-box:before{
+  content:"";position:absolute;left:0;right:0;top:0;height:6px;border-top-left-radius:12px;border-top-right-radius:12px;
+  background:linear-gradient(90deg,#1fa97a,#60a5fa);
+}
+
+
+/* Products layout */
+.products-layout{display:grid;grid-template-columns:1.15fr .85fr;gap:16px}
+.list-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.product-editor{
+  background:#fff;border:2px solid var(--border);border-radius:12px;padding:14px;box-shadow:var(--shadow)
+}
+.product-editor h3{margin:2px 0 10px}
+.product-editor form label{display:block;margin:8px 0;color:var(--text)}
+.product-editor input,.product-editor textarea,.product-editor select{
+  width:100%;background:#fff;border:2px solid var(--border);color:var(--text);
+  border-radius:8px;padding:10px;outline:none;transition:border-color .15s, box-shadow .15s;
+}
+.product-editor input:focus,.product-editor textarea:focus,.product-editor select:focus{
+  border-color:#94a3b8;box-shadow:0 0 0 3px rgba(148,163,184,.25)
+}
+.images{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:10px 0}
+.img-preview,.img-grid{min-height:72px;background:var(--bg-soft);border:2px dashed #b8c6d8;border-radius:10px;padding:8px}
+.img-grid{display:flex;gap:8px;flex-wrap:wrap}
+.img-grid img,.img-preview img{height:72px;border-radius:8px;border:2px solid var(--border);background:#fff}
+
+
+/* ===== Products table – same style as wholesale ===== */
+
+
+/* كارد لطيف حوالين جدول المنتجات */
+.products-list{
+  background:#fff;
+  border:2px solid var(--border);
+  border-radius:12px;
+  padding:10px;
+  box-shadow:var(--shadow);
+}
+.products-list .list-header{
+  margin:0 0 8px;
+  padding:0 0 6px;
+  border-bottom:1px solid var(--grid);
+}
+
+
+/* جدول المنتجات */
+#prodTable{
+  width:100%;
+  border-collapse:separate !important;
+  border-spacing:0 !important;
+  outline:1px solid var(--grid);
+  outline-offset:-1px;
+  border-radius:10px;
+  overflow:hidden; /* علشان الحواف تبان */
+}
+
+
+/* هيدر لازق وحدود واضحة */
+#prodTable thead th{
+  position:sticky; top:0; z-index:1;
+  background:linear-gradient(180deg,#f9fbff,#edf2f7);
+  color:var(--text-soft);
+  border-bottom:2px solid var(--border);
+  border-right:1px solid var(--grid);
+}
+#prodTable thead th:first-child{ border-top-left-radius:10px }
+#prodTable thead th:last-child{ border-top-right-radius:10px; border-right:0 }
+
+
+/* الجسم + زيبرة + هوفر */
+#prodTable tbody td{
+  background:#fff;
+  border-right:1px solid var(--grid);
+  border-bottom:1px solid var(--grid);
+}
+#prodTable tbody td:last-child{ border-right:0 }
+#prodTable tbody tr:nth-child(odd) td{ background:#fbfdff }
+#prodTable tbody tr:hover td{ background:#f6fbff }
+
+
+/* مسافات خلايا */
+#prodTable th, #prodTable td{
+  padding:12px 10px;
+  text-align:start;
+  vertical-align:middle;
+  white-space:normal;
+}
+
+
+/* محاذاة/عرض الأعمدة: [ID, Name, SKU, Price, Stock, Actions] */
+#prodTable th:nth-child(1), #prodTable td:nth-child(1){ text-align:center; width:68px }
+#prodTable th:nth-child(3), #prodTable td:nth-child(3){ text-align:center; width:120px } /* SKU */
+#prodTable th:nth-child(4), #prodTable td:nth-child(4){
+  text-align:right; width:120px;
+  font-weight:600; color:#0b3b2d; background:#e9fff7;
+  border-color:#bfead9;
+}
+#prodTable th:nth-child(5), #prodTable td:nth-child(5){ text-align:center; width:100px } /* Stock */
+#prodTable th:nth-child(6), #prodTable td:nth-child(6){ text-align:center; width:150px } /* Actions */
+
+
+/* لفّ الاسم الطويل */
+#prodTable td:nth-child(2){ word-break:break-word }
+
+
+/* تنسيق أزرار الأكشن جوا الجدول */
+#prodTable .btn.small{ margin-inline:4px }
+
+
+/* اسكرول أفقي لطيف على الشاشات الصغيرة */
+@media(max-width: 900px){
+  .products-list{ padding:8px; overflow:auto }
+  #prodTable th, #prodTable td{ padding:10px 8px }
+  .products-list::-webkit-scrollbar{ height:8px }
+  .products-list::-webkit-scrollbar-thumb{ background:#d1d8e5; border-radius:6px }
+}
+
+
+/* Modal (Order details) */
+.mdefsm-modal{position:fixed;inset:0;background:rgba(15,23,42,.25);display:flex;align-items:center;justify-content:center;z-index:9999}
+.mdefsm-modal.hidden{display:none}
+.mdefsm-modal-content{
+  background:#fff;border:2px solid var(--border);color:var(--text);
+  border-radius:14px;padding:16px;max-width:780px;width:96%;max-height:86vh;overflow:auto;position:relative;
+  box-shadow:0 12px 34px rgba(0,0,0,.12)
+}
+.modal-close{
+  position:absolute;right:10px;top:10px;background:#fff;border:2px solid var(--border);color:#334155;
+  border-radius:50%;width:32px;height:32px;font-size:20px;cursor:pointer;box-shadow:var(--shadow)
+}
+.modal-close:hover{background:var(--hover)}
+.invoice-header{display:flex;align-items:center;gap:12px;border-bottom:2px solid var(--border);padding-bottom:10px;margin-bottom:10px}
+.invoice-header img{height:46px}
+.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
+.modal-actions{text-align:right;margin-top:10px}
+
+
+/* Responsive */
+@media (max-width: 960px){
+  .mdefsm-cards{grid-template-columns:1fr}
+  .products-layout{grid-template-columns:1fr}
+  .summary{grid-template-columns:1fr}
+}
+
+
+/* ===== Failsafe ===== */
+.table-scroll { border-width: 2px !important; }
+.mdefsm-table { border-collapse: separate !important; border-spacing: 0 !important; }
+#prodTable, #prodTable th, #prodTable td { border-color: var(--grid) !important; }
+
+
+/* ===== FIX: Product Editor (labels + inputs) – scoped only ===== */
+.product-editor{ background:#fff; border:2px solid var(--border); border-radius:12px; padding:14px; box-shadow:var(--shadow); direction:rtl; text-align:right; }
+.product-editor h3{ margin:2px 0 10px; text-align:center; }
+
+
+/* أهم إصلاحات: منع الثيم من تحويل label لقائمة/إضافة أيقونات */
+.product-editor form label{
+  display:block !important;
+  list-style: none !important;
+  list-style-type: none !important;
+  background-image: none !important;
+  position: relative;
+  margin: 8px 0 !important;
+  padding: 0 !important;
+  color: var(--text);
+}
+.product-editor form label::before,
+.product-editor form label::after,
+.product-editor form label::marker{
+  content: "" !important;
+  display: none !important;
+}
+
+
+/* خلي المدخل تحت العنوان مباشرة وبعروض كاملة */
+.product-editor form label > input,
+.product-editor form label > textarea,
+.product-editor form label > select{
+  display:block !important;
+  width:100% !important;
+  margin-top:6px !important;
+  background:#fff !important;
+  border:2px solid var(--border) !important;
+  color:var(--text) !important;
+  border-radius:10px !important;
+  padding:10px 12px !important;
+  outline:none !important;
+  box-shadow:none !important;
+  transition:border-color .15s, box-shadow .15s;
+}
+.product-editor form label > input:focus,
+.product-editor form label > textarea:focus,
+.product-editor form label > select:focus{
+  border-color:#94a3b8 !important;
+  box-shadow:0 0 0 3px rgba(148,163,184,.25) !important;
+}
+
+
+/* ارتفاعات مناسبة */
+.product-editor input[type="text"],
+.product-editor input[type="number"],
+.product-editor input[type="email"],
+.product-editor input[type="search"],
+.product-editor select{ height:42px; }
+.product-editor textarea{ min-height:120px; resize:vertical; }
+
+
+/* الحقول الرقمية و SKU تبقى LTR لسهولة الكتابة */
+#p_regular_price, #p_sale_price, #p_sku { direction:ltr; text-align:left; }
+
+
+/* قسم الصور — بدون تغيير كبير */
+.product-editor .images{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:10px 0; }
+.product-editor .images > div{ background:var(--bg-soft); border:1px solid var(--grid); border-radius:10px; padding:10px; }
+.product-editor .images span{ display:block; margin-bottom:6px; color:var(--text-soft); font-weight:600; }
+.img-preview,.img-grid{ min-height:72px; background:#fff; border:2px dashed #b8c6d8; border-radius:10px; padding:8px; }
+.img-grid{ display:flex; gap:8px; flex-wrap:wrap; }
+.img-grid img,.img-preview img{ height:72px; border-radius:8px; border:2px solid var(--border); background:#fff; }
+
+
+@media (max-width: 720px){
+  .product-editor .images{ grid-template-columns:1fr; }
+}
+.btn.danger{ background:#ef4444; border-color:#ef4444; color:#fff }
+.btn.danger:hover{ filter:brightness(1.05) }
+
+/* ===== Images panel (frontend list/delete) ===== */
+.mdefsm-images-panel.card{
+  background:#fff;
+  border:2px solid var(--border);
+  border-radius:12px;
+  padding:12px;
+  box-shadow:var(--shadow);
+}
+.mdefsm-images-panel h3{ margin:0 0 8px; font-size:1rem; color:var(--text); }
+.mdefsm-images-panel .button{ margin-inline-end:6px; border:2px solid var(--border); border-radius:8px; padding:6px 10px; cursor:pointer; }
+.mdefsm-images-panel .button-link-delete{ color:#b91c1c; border-color:#fecaca; background:#fff5f5; }
+.mdefsm-images-panel img{ border:1px solid var(--grid); border-radius:8px; background:#fff; max-width:100%; height:auto; display:block; }
+.mdefsm-images-panel .mdefsm-img{ background:var(--bg-soft); border:1px dashed var(--grid); border-radius:10px; padding:8px; }
