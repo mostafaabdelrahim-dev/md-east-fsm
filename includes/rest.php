@@ -2,8 +2,23 @@
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 class MDEFSM_REST {
+
+    /* Capabilities/role helpers */
+    private function is_store_manager_role(): bool {
+        $u = wp_get_current_user();
+        return $u && in_array( 'md_store_manager', (array) $u->roles, true );
+    }
+
+    public function can_manage(): bool {
+        // Use capabilities, not role strings, so admins (manage_options) and Woo managers (manage_woocommerce)
+        // pass reliably; also allow your custom role by slug.
+        return current_user_can('manage_woocommerce')
+            || current_user_can('manage_options')
+            || $this->is_store_manager_role();
+    }
+
     public function __construct() {
-        // Orders
+        // ===== Orders =====
         register_rest_route( 'md/v1', '/orders', array(
             'methods'  => 'GET',
             'callback' => array( $this, 'get_orders' ),
@@ -34,7 +49,7 @@ class MDEFSM_REST {
             'permission_callback' => array( $this, 'can_manage' ),
         ) );
 
-        // Wholesale
+        // ===== Wholesale =====
         register_rest_route( 'md/v1', '/wholesale', array(
             'methods'  => 'GET',
             'callback' => array( $this, 'get_wholesale' ),
@@ -56,7 +71,7 @@ class MDEFSM_REST {
             'permission_callback' => array( $this, 'can_manage' ),
         ) );
 
-        // Products (list/create/get/delete/upload)
+        // ===== Products (list/create/get/delete/upload) =====
         register_rest_route( 'md/v1', '/products', array(
             'methods'  => 'GET',
             'callback' => array( $this, 'products_list' ),
@@ -83,13 +98,13 @@ class MDEFSM_REST {
             'permission_callback' => array( $this, 'can_manage' ),
         ) );
 
-        // NEW: Product images list/delete for frontend editor
+        // ===== NEW: Product images list/delete for frontend editor =====
         register_rest_route( 'md/v1', '/products/(?P<id>\d+)/images', array(
             'methods'  => 'GET',
             'callback' => array( $this, 'list_product_images' ),
             'permission_callback' => function( WP_REST_Request $req ) {
                 $pid = (int) $req['id'];
-                return current_user_can('manage_woocommerce') || current_user_can('edit_post', $pid);
+                return current_user_can('manage_woocommerce') || current_user_can('manage_options') || current_user_can('edit_post', $pid) || $this->is_store_manager_role();
             },
         ) );
 
@@ -102,15 +117,12 @@ class MDEFSM_REST {
             ),
             'permission_callback' => function( WP_REST_Request $req ) {
                 $pid = (int) $req->get_param('product');
-                return current_user_can('manage_woocommerce') || current_user_can('delete_post', $pid);
+                return current_user_can('manage_woocommerce') || current_user_can('manage_options') || current_user_can('delete_post', $pid) || $this->is_store_manager_role();
             },
         ) );
     }
 
-    public function can_manage() {
-        return current_user_can( 'manage_woocommerce' ) || current_user_can( 'administrator' ) || current_user_can( 'md_store_manager' );
-    }
-
+    /* ===== Orders ===== */
     private function order_to_row( $order ) {
         $id = $order->get_id();
         return array(
@@ -264,7 +276,7 @@ class MDEFSM_REST {
         return rest_ensure_response( compact('labels','values') );
     }
 
-    /* ==== Wholesale ==== */
+    /* ===== Wholesale ===== */
     public function submit_wholesale( $request ) {
         $params = $request->get_json_params();
         $name = sanitize_text_field( $params['name'] ?? '' );
@@ -359,7 +371,7 @@ class MDEFSM_REST {
         return new WP_REST_Response( $html, 200, array( 'Content-Type' => 'text/html; charset=UTF-8' ) );
     }
 
-    /* ==== Products ==== */
+    /* ===== Products ===== */
     public function products_list( $request ) {
         $args = array(
             'status' => array( 'publish','draft','pending','private' ),
@@ -506,7 +518,7 @@ class MDEFSM_REST {
         }
     }
 
-    /* ===== NEW: Images endpoints handlers ===== */
+    /* ===== Images endpoints handlers ===== */
 
     public function list_product_images( WP_REST_Request $req ) {
         $pid = (int) $req['id'];
@@ -562,4 +574,14 @@ class MDEFSM_REST {
 
         return rest_ensure_response(array('ok'=>true,'removed'=>$att,'product'=>$pid));
     }
+}
+
+/* Ensure routes are registered on REST bootstrap */
+if ( ! function_exists('mdefsm_boot_rest') ) {
+    function mdefsm_boot_rest() {
+        if ( empty($GLOBALS['mdefsm_rest']) || ! ($GLOBALS['mdefsm_rest'] instanceof MDEFSM_REST) ) {
+            $GLOBALS['mdefsm_rest'] = new MDEFSM_REST();
+        }
+    }
+    add_action('rest_api_init', 'mdefsm_boot_rest');
 }
